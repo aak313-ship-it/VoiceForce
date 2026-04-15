@@ -50,9 +50,27 @@
 
     <!-- SECTION 3: Writer influences -->
     <section id="section-influences" class="card disabled">
-      <h2><span class="step">3</span> Writer Influences <span class="optional">(optional — pick up to 3)</span></h2>
+      <div class="section-header">
+        <h2><span class="step">3</span> Writer Influences <span class="optional">(optional — pick up to 3)</span></h2>
+        <button id="btn-add-influence" class="small">+ Add</button>
+      </div>
       <div id="writer-grid" class="writer-grid"></div>
     </section>
+
+    <!-- Add Influence Modal -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div class="modal">
+        <h3>Add Writer Influence</h3>
+        <p class="modal-hint">Paste sample text from someone on Twitter, LinkedIn, or anywhere. Claude will generate their style profile automatically.</p>
+        <input type="text" id="influence-name" placeholder="Name (e.g. Paul Graham, Naval Ravikant)" />
+        <input type="text" id="influence-era" placeholder="Category (e.g. Tech Twitter, LinkedIn, Blogger) — optional" />
+        <textarea id="influence-sample" placeholder="Paste 3–10 examples of their writing here…" rows="8"></textarea>
+        <div class="modal-actions">
+          <button id="btn-modal-cancel" class="small">Cancel</button>
+          <button id="btn-modal-save" class="primary" style="margin-top:0; width:auto; padding: 0.6rem 1.5rem;">Generate &amp; Add</button>
+        </div>
+      </div>
+    </div>
 
     <!-- SECTION 4: Rewrite -->
     <section id="section-rewrite" class="card disabled">

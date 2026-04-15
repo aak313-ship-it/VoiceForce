@@ -345,6 +345,76 @@ button.small {
   white-space: nowrap;
 }
 
+/* Section header with action button */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.section-header h2 { margin-bottom: 0; }
+
+/* Writer card delete button */
+.writer-card { position: relative; }
+
+.writer-card .btn-delete-writer {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 0.1rem 0.3rem;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.writer-card:hover .btn-delete-writer { opacity: 1; }
+.writer-card .btn-delete-writer:hover { color: var(--error); background: transparent; border: none; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.modal h3 { font-size: 1.05rem; color: #fff; }
+
+.modal-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
 /* Toast */
 .toast {
   position: fixed;

@@ -26,6 +26,13 @@ const analyseResult     = $('analyse-result');
 
 const sectionInfluences = $('section-influences');
 const writerGrid        = $('writer-grid');
+const btnAddInfluence   = $('btn-add-influence');
+const modalOverlay      = $('modal-overlay');
+const influenceName     = $('influence-name');
+const influenceEra      = $('influence-era');
+const influenceSample   = $('influence-sample');
+const btnModalCancel    = $('btn-modal-cancel');
+const btnModalSave      = $('btn-modal-save');
 
 const sectionRewrite    = $('section-rewrite');
 const sourceText        = $('source-text');
@@ -247,22 +254,75 @@ async function loadWriters() {
   try {
     const writers = await api('GET', '/fragments');
     writerGrid.innerHTML = '';
-    writers.forEach((w) => {
-      const card = document.createElement('div');
-      card.className = 'writer-card';
-      card.dataset.slug = w.slug;
-      card.innerHTML = `
-        <div class="wname">${w.name}</div>
-        <div class="wera">${w.era}</div>
-        <div class="wsummary">${w.style_summary}</div>`;
-
-      card.addEventListener('click', () => toggleWriter(card, w.slug));
-      writerGrid.appendChild(card);
-    });
+    writers.forEach((w) => renderWriterCard(w));
   } catch (e) {
     showToast('Could not load writer influences', 'error');
   }
 }
+
+function renderWriterCard(w) {
+  const card = document.createElement('div');
+  card.className = 'writer-card';
+  card.dataset.slug = w.slug;
+  card.dataset.id = w.id;
+  card.innerHTML = `
+    <button class="btn-delete-writer" title="Remove">&#x2715;</button>
+    <div class="wname">${w.name}</div>
+    <div class="wera">${w.era || ''}</div>
+    <div class="wsummary">${w.style_summary || ''}</div>`;
+
+  card.querySelector('.btn-delete-writer').addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (!confirm(`Remove "${w.name}" from influences?`)) return;
+    try {
+      await api('DELETE', `/fragments/${w.id}`);
+      state.selectedWriters.delete(w.slug);
+      card.remove();
+      showToast('Influence removed', 'success');
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  });
+
+  card.addEventListener('click', () => toggleWriter(card, w.slug));
+  writerGrid.appendChild(card);
+}
+
+// Modal — add new influence
+btnAddInfluence.addEventListener('click', () => {
+  influenceName.value = '';
+  influenceEra.value = '';
+  influenceSample.value = '';
+  modalOverlay.classList.remove('hidden');
+  influenceName.focus();
+});
+
+btnModalCancel.addEventListener('click', () => modalOverlay.classList.add('hidden'));
+
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) modalOverlay.classList.add('hidden');
+});
+
+btnModalSave.addEventListener('click', async () => {
+  const name = influenceName.value.trim();
+  const era = influenceEra.value.trim();
+  const sampleText = influenceSample.value.trim();
+
+  if (!name) { showToast('Name is required', 'error'); return; }
+  if (!sampleText) { showToast('Paste some sample writing', 'error'); return; }
+
+  setLoading(btnModalSave, true);
+  try {
+    const writer = await api('POST', '/fragments', { name, era: era || undefined, sampleText });
+    renderWriterCard(writer);
+    modalOverlay.classList.add('hidden');
+    showToast(`${writer.name} added`, 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    setLoading(btnModalSave, false);
+  }
+});
 
 function toggleWriter(card, slug) {
   if (state.selectedWriters.has(slug)) {
