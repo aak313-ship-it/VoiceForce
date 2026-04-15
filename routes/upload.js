@@ -56,4 +56,30 @@ router.post('/:profileId', upload.array('files', 20), async (req, res) => {
   }
 });
 
+// POST /upload/:profileId/text — save pasted text directly as a voice sample
+router.post('/:profileId/text', async (req, res) => {
+  const { profileId } = req.params;
+  const { text, label } = req.body;
+
+  if (!text || typeof text !== 'string' || text.trim() === '') {
+    return res.status(400).json({ error: 'text is required.' });
+  }
+
+  try {
+    const filename = (label && label.trim()) ? label.trim() : `Pasted text ${new Date().toLocaleDateString()}`;
+
+    const { rows } = await pool.query(
+      `INSERT INTO voice_samples (profile_id, filename, mimetype, extracted_text, created_at)
+       VALUES ($1, $2, $3, $4, NOW())
+       RETURNING id, filename, created_at`,
+      [profileId, filename, 'text/plain', text.trim()]
+    );
+
+    res.status(201).json({ uploaded: [rows[0]] });
+  } catch (err) {
+    console.error('Paste upload error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

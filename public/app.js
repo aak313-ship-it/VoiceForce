@@ -18,6 +18,13 @@ const profileSelect     = $('profile-select');
 const profileSummary    = $('profile-summary');
 
 const sectionUpload     = $('section-upload');
+const tabPaste          = $('tab-paste');
+const tabFile           = $('tab-file');
+const panelPaste        = $('panel-paste');
+const panelFile         = $('panel-file');
+const pasteText         = $('paste-text');
+const pasteLabel        = $('paste-label');
+const btnPasteSave      = $('btn-paste-save');
 const uploadArea        = $('upload-area');
 const fileInput         = $('file-input');
 const sampleList        = $('sample-list');
@@ -161,6 +168,55 @@ profileSelect.addEventListener('change', async () => {
 });
 
 // ─── Section 2: Upload ───────────────────────────────────────────────────────
+
+// Tab switching
+tabPaste.addEventListener('click', () => {
+  tabPaste.classList.add('active');
+  tabFile.classList.remove('active');
+  panelPaste.classList.remove('hidden');
+  panelFile.classList.add('hidden');
+});
+
+tabFile.addEventListener('click', () => {
+  tabFile.classList.add('active');
+  tabPaste.classList.remove('active');
+  panelFile.classList.remove('hidden');
+  panelPaste.classList.add('hidden');
+});
+
+// Paste text submit
+btnPasteSave.addEventListener('click', async () => {
+  const text = pasteText.value.trim();
+  if (!text) { showToast('Paste some text first', 'error'); return; }
+  if (!state.profileId) return;
+
+  if (state.sampleCount >= 5) {
+    showToast('Maximum 5 samples per profile', 'error');
+    return;
+  }
+
+  setLoading(btnPasteSave, true);
+  try {
+    const res = await fetch(`/upload/${state.profileId}/text`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, label: pasteLabel.value.trim() }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    const profile = await api('GET', `/profiles/${state.profileId}`);
+    renderSampleList(profile.samples);
+    pasteText.value = '';
+    pasteLabel.value = '';
+    showToast('Sample added', 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    setLoading(btnPasteSave, false);
+  }
+});
+
 function renderSampleList(samples) {
   sampleList.innerHTML = '';
   state.sampleCount = samples.length;

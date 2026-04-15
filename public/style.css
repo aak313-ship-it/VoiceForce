@@ -163,6 +163,30 @@ button.small {
   font-size: 0.82rem;
 }
 
+/* Sample input tabs */
+.sample-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-bottom: -1px;
+  padding: 0.5rem 1rem;
+}
+
+.tab:hover { background: transparent; color: var(--text); }
+.tab.active { border-bottom-color: var(--accent); color: var(--accent); }
+
 /* Upload area */
 .upload-area {
   border: 2px dashed var(--border);
