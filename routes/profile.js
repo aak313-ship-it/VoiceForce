@@ -142,10 +142,12 @@ router.post('/:id/analyse', async (req, res) => {
       .map((b) => b.text)
       .join('');
 
-    // Parse and validate — Claude must return pure JSON per the system prompt
+    // Strip markdown code fences if Claude wrapped the JSON despite instructions
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+
     let characteristics;
     try {
-      characteristics = JSON.parse(raw);
+      characteristics = JSON.parse(cleaned);
     } catch {
       return res.status(502).json({ error: 'Claude returned invalid JSON.', raw });
     }
