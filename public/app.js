@@ -44,6 +44,7 @@ const btnModalSave      = $('btn-modal-save');
 const sectionRewrite    = $('section-rewrite');
 const sourceText        = $('source-text');
 const toneInput         = $('tone-input');
+const toneBtns          = document.querySelectorAll('.tone-btn');
 const btnRewrite        = $('btn-rewrite');
 const rewriteOutput     = $('rewrite-output');
 const rewrittenText     = $('rewritten-text');
@@ -394,6 +395,29 @@ function toggleWriter(card, slug) {
   }
 }
 
+// ─── Tone presets ────────────────────────────────────────────────────────────
+toneBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const already = btn.classList.contains('selected');
+    toneBtns.forEach((b) => b.classList.remove('selected'));
+    if (!already) {
+      btn.classList.add('selected');
+      toneInput.value = '';
+    }
+  });
+});
+
+// Typing in custom field deselects presets
+toneInput.addEventListener('input', () => {
+  toneBtns.forEach((b) => b.classList.remove('selected'));
+});
+
+function getSelectedTone() {
+  const preset = document.querySelector('.tone-btn.selected');
+  if (preset) return preset.dataset.tone;
+  return toneInput.value.trim();
+}
+
 // ─── Section 4: Rewrite ──────────────────────────────────────────────────────
 btnRewrite.addEventListener('click', async () => {
   const text = sourceText.value.trim();
@@ -407,7 +431,7 @@ btnRewrite.addEventListener('click', async () => {
   const body = {
     profileId: state.profileId,
     text,
-    tone: toneInput.value.trim() || undefined,
+    tone: getSelectedTone() || undefined,
     writerSlugs: state.selectedWriters.size > 0 ? [...state.selectedWriters] : undefined,
   };
 

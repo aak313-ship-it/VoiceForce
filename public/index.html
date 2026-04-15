@@ -95,8 +95,16 @@
 
       <textarea id="source-text" placeholder="Paste your AI-generated text here…" rows="8"></textarea>
 
-      <div class="row">
-        <input type="text" id="tone-input" placeholder='Tone (e.g. "casual LinkedIn post", "professional email")' />
+      <div class="tone-section">
+        <label class="tone-label">Tone</label>
+        <div class="tone-presets">
+          <button class="tone-btn" data-tone="LinkedIn post">LinkedIn</button>
+          <button class="tone-btn" data-tone="Twitter/X thread">Twitter/X</button>
+          <button class="tone-btn" data-tone="professional email">Email</button>
+          <button class="tone-btn" data-tone="blog post">Blog</button>
+          <button class="tone-btn" data-tone="formal report">Formal</button>
+        </div>
+        <input type="text" id="tone-input" placeholder="Or type a custom tone…" />
       </div>
 
       <button id="btn-rewrite" class="primary">Rewrite in my voice</button>

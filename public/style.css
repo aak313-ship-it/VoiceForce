@@ -303,6 +303,43 @@ button.small {
   line-height: 1.4;
 }
 
+/* Tone presets */
+.tone-section {
+  margin-bottom: 0.85rem;
+}
+
+.tone-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.tone-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.tone-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.9rem;
+}
+
+.tone-btn:hover { border-color: var(--accent); color: var(--text); background: var(--surface2); }
+
+.tone-btn.selected {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* Rewrite output */
 .rewrite-output {
   margin-top: 1.25rem;
