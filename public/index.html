@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceForge</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>VoiceForge</h1>
+    <p class="tagline">Rewrite AI text in a human voice</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: Profile -->
+    <section id="section-profile" class="card">
+      <h2><span class="step">1</span> Voice Profile</h2>
+
+      <div class="row">
+        <input type="text" id="profile-name" placeholder="Profile name (e.g. My Blog Voice)" />
+        <button id="btn-create-profile">Create</button>
+      </div>
+
+      <div class="row">
+        <select id="profile-select">
+          <option value="">— select a profile —</option>
+        </select>
+      </div>
+
+      <div id="profile-summary" class="summary hidden"></div>
+    </section>
+
+    <!-- SECTION 2: Upload samples -->
+    <section id="section-upload" class="card disabled">
+      <h2><span class="step">2</span> Writing Samples</h2>
+
+      <div class="upload-area" id="upload-area">
+        <p>Drop files here or <label for="file-input" class="link">browse</label></p>
+        <p class="hint">PDF, DOCX, TXT, MD, HTML &mdash; max 5 samples</p>
+        <input type="file" id="file-input" multiple accept=".pdf,.docx,.txt,.md,.html" hidden />
+      </div>
+
+      <ul id="sample-list" class="sample-list"></ul>
+
+      <button id="btn-analyse" class="primary" disabled>Analyse my voice</button>
+      <div id="analyse-result" class="analyse-result hidden"></div>
+    </section>
+
+    <!-- SECTION 3: Writer influences -->
+    <section id="section-influences" class="card disabled">
+      <h2><span class="step">3</span> Writer Influences <span class="optional">(optional — pick up to 3)</span></h2>
+      <div id="writer-grid" class="writer-grid"></div>
+    </section>
+
+    <!-- SECTION 4: Rewrite -->
+    <section id="section-rewrite" class="card disabled">
+      <h2><span class="step">4</span> Rewrite</h2>
+
+      <textarea id="source-text" placeholder="Paste your AI-generated text here…" rows="8"></textarea>
+
+      <div class="row">
+        <input type="text" id="tone-input" placeholder='Tone (e.g. "casual LinkedIn post", "professional email")' />
+      </div>
+
+      <button id="btn-rewrite" class="primary">Rewrite in my voice</button>
+
+      <div id="rewrite-output" class="rewrite-output hidden">
+        <div class="output-header">
+          <h3>Rewritten</h3>
+          <button id="btn-copy" class="small">Copy</button>
+        </div>
+        <div id="rewritten-text" class="rewritten-text"></div>
+      </div>
+
+      <div id="history-section" class="history hidden">
+        <h3>Recent rewrites</h3>
+        <ul id="history-list"></ul>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

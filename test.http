@@ -1,0 +1,104 @@
+### VoiceForge — API test suite
+### Run with the REST Client extension in VS Code
+### Variables — update BASE_URL if running remotely
+
+@base = http://localhost:3000
+
+# ─── 1. Create a voice profile ──────────────────────────────────────────────
+# @name createProfile
+POST {{base}}/profiles
+Content-Type: application/json
+
+{
+  "name": "Test Profile",
+  "description": "A test voice profile"
+}
+
+###
+
+# ─── 2. List profiles ───────────────────────────────────────────────────────
+GET {{base}}/profiles
+
+###
+
+# ─── 3. Upload a writing sample ─────────────────────────────────────────────
+# Replace :profileId with the id returned in step 1
+# Use a REST client that supports multipart, or run this curl command:
+# curl -F "files=@sample.txt" http://localhost:3000/upload/1
+
+POST {{base}}/upload/1
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="files"; filename="sample.txt"
+Content-Type: text/plain
+
+The quick brown fox jumps over the lazy dog. Life is short, art is long.
+Writing is thinking. Clear sentences come from clear thoughts.
+
+--boundary--
+
+###
+
+# ─── 4. Get profile with samples ────────────────────────────────────────────
+GET {{base}}/profiles/1
+
+###
+
+# ─── 5. Analyse the profile ─────────────────────────────────────────────────
+POST {{base}}/profiles/1/analyse
+
+###
+
+# ─── 6. List writer fragments ───────────────────────────────────────────────
+GET {{base}}/fragments
+
+###
+
+# ─── 7. Rewrite without writer influences ───────────────────────────────────
+POST {{base}}/rewrite
+Content-Type: application/json
+
+{
+  "profileId": 1,
+  "text": "Artificial intelligence is a rapidly evolving field that is transforming numerous industries worldwide. The technology has advanced significantly in recent years.",
+  "tone": "casual blog post"
+}
+
+###
+
+# ─── 8. Rewrite with writer influences ──────────────────────────────────────
+POST {{base}}/rewrite
+Content-Type: application/json
+
+{
+  "profileId": 1,
+  "text": "Artificial intelligence is a rapidly evolving field that is transforming numerous industries worldwide. The technology has advanced significantly in recent years.",
+  "tone": "casual blog post",
+  "writerSlugs": ["hemingway", "orwell"]
+}
+
+###
+
+# ─── 9. Rewrite history ─────────────────────────────────────────────────────
+GET {{base}}/rewrite/history/1
+
+###
+
+# ─── 10. Update profile name ────────────────────────────────────────────────
+PATCH {{base}}/profiles/1
+Content-Type: application/json
+
+{
+  "name": "Updated Profile Name"
+}
+
+###
+
+# ─── 11. Delete profile ─────────────────────────────────────────────────────
+# DELETE {{base}}/profiles/1
+
+###
+
+# ─── Health check ───────────────────────────────────────────────────────────
+GET {{base}}/health
