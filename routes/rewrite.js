@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
       writerFragments = rows;
     }
 
-    const systemPrompt = buildSystemPrompt(profile, writerFragments);
+    const systemPrompt = buildSystemPrompt(profile, writerFragments, tone || '');
     const userMessage = buildRewritePrompt(text.trim(), tone || '');
 
     // ── Server-Sent Events headers ──────────────────────────────────────────
